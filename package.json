@@ -2,5 +2,26 @@
   "dependencies": {
     "express": "^5.2.1",
     "nodemon": "^3.1.11"
-  }
+  },
+  "name": "planthealth",
+  "version": "1.0.0",
+  "description": "Backend API for plant health monitoring",
+  "main": "src/app.js",
+  "devDependencies": {},
+  "scripts": {
+    "dev": "nodemon src/app.js",
+    "start": "node src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PiyushSharma0704/plantHealth.git"
+  },
+  "keywords": [],
+  "author": "Piyush Sharma",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/PiyushSharma0704/plantHealth/issues"
+  },
+  "homepage": "https://github.com/PiyushSharma0704/plantHealth#readme"
 }
