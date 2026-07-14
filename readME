@@ -1,0 +1,519 @@
+Piyush — since you’re already comfortable with **React, Node, Express, and MongoDB**, this AI Plant Health Monitoring app is a perfect full-stack + AI portfolio project (great for FAANG-style product thinking too).
+
+Below is a clean **README-style Project Requirements Document** you can directly drop into your repo.
+
+---
+
+# 🌱 AI-Powered Plant Health Monitoring App (React Native + MERN)
+
+An AI-driven mobile application that diagnoses plant diseases, pests, and nutrient deficiencies using image recognition. The app provides real-time treatment recommendations and plant care guidance for gardeners and farmers.
+
+Inspired by leading solutions like:
+
+* Plantix
+* Agrio
+* Farmonaut
+
+---
+
+## 🚀 Tech Stack
+
+### Frontend (Mobile)
+
+* React Native (Expo or CLI)
+* TypeScript
+* Axios
+* Native Camera & Image Picker
+* UI Library (ShadCN-style components or React Native Paper)
+
+### Backend (API)
+
+* Node.js
+* Express.js
+* MongoDB (Mongoose)
+* JWT Authentication
+* Cloud Storage (AWS S3 / Cloudinary)
+
+### AI Layer
+
+* Python (FastAPI or Flask)
+* TensorFlow / PyTorch model
+* Image classification CNN
+* REST API for predictions
+
+---
+
+## 🎯 Core Features
+
+### 📷 AI Photo Diagnosis
+
+* Upload plant leaf photos
+* Detect:
+
+  * Diseases
+  * Pests
+  * Nutrient deficiencies
+* Confidence score per result
+
+### 🌿 Plant Identification
+
+* Recognize plant species
+* Show care profile:
+
+  * Water needs
+  * Sunlight
+  * Soil type
+
+### 💊 Treatment Recommendations
+
+* Organic remedies
+* Chemical treatments
+* Prevention tips
+
+### 📊 Plant Health History
+
+* Saved scans
+* Progress tracking
+* Before/after photos
+
+### ⏰ Smart Reminders
+
+* Watering schedule
+* Fertilizing alerts
+* Disease follow-up
+
+---
+
+## 🔐 Authentication & Users
+
+* Email/Password login
+* JWT protected routes
+* User profiles
+* Saved plants & scans
+
+---
+
+## 📦 Backend API Requirements
+
+### Auth
+
+```
+POST /auth/register
+POST /auth/login
+```
+
+### Plants
+
+```
+POST /plants/add
+GET /plants/user
+DELETE /plants/:id
+```
+
+### AI Diagnosis
+
+```
+POST /ai/predict
+```
+
+### History
+
+```
+GET /history
+POST /history/save
+```
+
+---
+
+## 🧠 AI Model Requirements
+
+### Input
+
+* JPG/PNG plant images
+
+### Output
+
+```json
+{
+  "plant": "Tomato",
+  "disease": "Leaf Blight",
+  "confidence": 0.94,
+  "treatment": ["Neem oil spray", "Remove infected leaves"]
+}
+```
+
+### Model Goals
+
+* 90%+ accuracy
+* Trained on public plant disease datasets
+* Lightweight for fast inference
+
+---
+
+## 🗄 Database Schema (MongoDB)
+
+### User
+
+* name
+* email
+* password
+* savedPlants[]
+
+### Plant
+
+* name
+* species
+* healthStatus
+* lastScanDate
+
+### ScanHistory
+
+* userId
+* imageUrl
+* result
+* timestamp
+
+---
+
+## ☁️ Deployment Plan
+
+### Mobile
+
+* Expo build / Play Store ready
+
+### Backend
+
+* AWS / Render / Railway
+
+### AI Server
+
+* FastAPI on cloud VM
+
+### Database
+
+* MongoDB Atlas
+
+---
+
+## 📈 Future Enhancements
+
+* Satellite crop monitoring
+* Multilingual support
+* Community plant disease forum
+* AI chat assistant for plant care
+* Offline detection mode
+
+---
+
+## 🧪 MVP Milestones
+
+### Phase 1
+
+✅ React Native UI
+✅ Auth system
+✅ Image upload
+✅ MongoDB backend
+
+### Phase 2
+
+✅ AI disease detection API
+✅ Treatment engine
+
+### Phase 3
+
+✅ History + reminders
+✅ Deployment
+==========
+==========
+
+Great — starting with **Backend + LLD (Low Level Design)** is exactly how real production systems are built.
+I’ll design this like a scalable MERN + AI microservice system (the kind interviewers love).
+
+Below is a **complete Backend LLD** you can directly turn into code.
+
+---
+
+# 📐 Backend Low Level Design (LLD)
+
+AI Plant Health Monitoring System
+
+---
+
+## 🏗 System Architecture (Microservice-ready)
+
+```
+Mobile App (React Native)
+        |
+        v
+API Gateway (Express)
+        |
+-------------------------------------------------
+|            |              |                  |
+Auth Service  Plant Service  Scan Service   AI Service (Python)
+        |
+     MongoDB Atlas
+```
+
+---
+
+# 📁 Backend Folder Structure (Node + Express)
+
+```
+backend/
+│
+├── src/
+│   ├── app.js
+│   ├── server.js
+│
+│   ├── config/
+│   │   ├── db.js
+│   │   ├── env.js
+│
+│   ├── routes/
+│   │   ├── auth.routes.js
+│   │   ├── plant.routes.js
+│   │   ├── scan.routes.js
+│
+│   ├── controllers/
+│   │   ├── auth.controller.js
+│   │   ├── plant.controller.js
+│   │   ├── scan.controller.js
+│
+│   ├── services/
+│   │   ├── ai.service.js
+│   │   ├── upload.service.js
+│
+│   ├── models/
+│   │   ├── User.js
+│   │   ├── Plant.js
+│   │   ├── ScanHistory.js
+│
+│   ├── middlewares/
+│   │   ├── auth.middleware.js
+│   │   ├── error.middleware.js
+│
+│   └── utils/
+│       ├── jwt.js
+│       ├── response.js
+│
+└── package.json
+```
+
+---
+
+# 🧠 Core Modules (LLD Breakdown)
+
+---
+
+## 1️⃣ Authentication Module
+
+### User Schema
+
+```js
+User {
+  _id: ObjectId
+  name: String
+  email: String (unique)
+  password: String (hashed)
+  role: "user" | "admin"
+  createdAt
+}
+```
+
+### APIs
+
+| Method | Endpoint       | Description    |
+| ------ | -------------- | -------------- |
+| POST   | /auth/register | Create account |
+| POST   | /auth/login    | Login          |
+| GET    | /auth/profile  | User info      |
+
+---
+
+## 2️⃣ Plant Management Module
+
+### Plant Schema
+
+```js
+Plant {
+  _id: ObjectId
+  userId: ObjectId
+  name: String
+  species: String
+  sunlight: String
+  waterFrequency: String
+  createdAt
+}
+```
+
+### APIs
+
+| Method | Endpoint    | Description     |
+| ------ | ----------- | --------------- |
+| POST   | /plants     | Add plant       |
+| GET    | /plants     | Get user plants |
+| DELETE | /plants/:id | Remove plant    |
+
+---
+
+## 3️⃣ Scan & AI Diagnosis Module
+
+### ScanHistory Schema
+
+```js
+ScanHistory {
+  _id: ObjectId
+  userId: ObjectId
+  plantId: ObjectId
+  imageUrl: String
+  disease: String
+  confidence: Number
+  treatment: [String]
+  createdAt
+}
+```
+
+---
+
+### AI Flow (Important LLD Logic)
+
+```
+User uploads image
+      ↓
+Backend stores image (Cloudinary/S3)
+      ↓
+Backend calls AI microservice
+      ↓
+AI returns diagnosis JSON
+      ↓
+Backend saves result in MongoDB
+      ↓
+Response sent to app
+```
+
+---
+
+### APIs
+
+| Method | Endpoint      | Description             |
+| ------ | ------------- | ----------------------- |
+| POST   | /scan         | Upload image & diagnose |
+| GET    | /scan/history | Past scans              |
+
+---
+
+# 🤖 AI Microservice (Separate Server)
+
+### Tech:
+
+* Python + FastAPI
+* CNN Model
+
+### Endpoint:
+
+```
+POST /predict
+```
+
+### Input:
+
+```json
+{
+  "imageUrl": "https://..."
+}
+```
+
+### Output:
+
+```json
+{
+  "plant": "Tomato",
+  "disease": "Leaf Blight",
+  "confidence": 0.94,
+  "treatment": [
+    "Neem oil spray",
+    "Remove infected leaves"
+  ]
+}
+```
+
+---
+
+# 🔐 Security Design
+
+✅ JWT authentication
+✅ Password hashing (bcrypt)
+✅ Role-based access (future admin panel)
+✅ Rate limiting (scan API)
+
+---
+
+# 📦 Database Relationships
+
+```
+User 1 ────> many Plants
+User 1 ────> many ScanHistory
+Plant 1 ───> many ScanHistory
+```
+
+---
+
+# ⚙️ Key Backend Services (LLD Level)
+
+### ai.service.js
+
+* sendImageToAI()
+* parsePrediction()
+
+### upload.service.js
+
+* uploadToCloud()
+* getPublicUrl()
+
+---
+
+# 🚀 Performance Design
+
+| Area      | Solution                |
+| --------- | ----------------------- |
+| Heavy AI  | Separate Python service |
+| Images    | CDN storage             |
+| DB        | Indexed userId          |
+| API speed | Async queues (future)   |
+
+---
+
+# 📊 Error Handling
+
+Global middleware:
+
+```js
+{
+  status: false,
+  message: "Something went wrong",
+  code: 500
+}
+```
+
+---
+
+# 🔄 Future Scale Ready
+
+Add later without breaking system:
+
+✅ Web dashboard
+✅ Admin disease database
+✅ Notification service
+✅ Analytics
+
+---
+
+## 🎯 Why This LLD Is Strong (Interview-Ready)
+
+✔ Clean separation of concerns
+✔ Microservice AI (real-world pattern)
+✔ Secure scalable DB design
+✔ Production folder structure
+
+=================================
+=================================

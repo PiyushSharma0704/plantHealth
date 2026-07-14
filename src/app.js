@@ -1,69 +1,38 @@
 const express = require("express");
+require("dotenv").config();
 const app = express();
+const cookieParser = require("cookie-parser");
+const connectDB = require("./config/database");
 
-// app.use("/", (req, res) => {
-//   res.send("Hello, World! from server");
-// });
+app.use(express.json()); 
+app.use(cookieParser());
+console.log("ENV:", process.env.MONGO_URI);
 
-app.use("/test", (req, res) => {
-  res.send("This is the /test route working 🚀");
-});
+const authRouter = require("./routes/auth");
+const profileRouter = require("./routes/profile");
+const productsRouter = require("./routes/products");
+const categoryRouter = require("./routes/category");
+const attributeRouter = require("./routes/attribute");
+const productRouter = require("./routes/products");
+const addressRouter = require("./routes/address");
 
-app.use("/hello", (req, res) => {
-  res.send("This is the /hello route working 🚀");
-});
 
-// This will only return for POST requests to /user
-app.post("/user", (req, res) => {
-  res.send("This is the post /user route working 🚀");
-});
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/profile", profileRouter);
+app.use("/api/v1/products", productsRouter);
+app.use("/api/v1/categories", categoryRouter);
+app.use("/api/v1/attributes", attributeRouter);
+app.use("/api/v1/addresses", addressRouter);
 
-// This will only return for GET requests to /user
-// app.get("/user", (req, res) => {
-//   res.send("This is the get /user route working 🚀");
-// });
-
-// This will only return for GET requests to /user with query parameters
-app.get("/user", (req, res) => {
-  console.log(req.query);
-  res.send("This is the get /user route working 🚀");
-});
-
-// This will only return for GET requests to /user/:userID
-app.get("/user/:userID", (req, res) => {
-  console.log(req.params);
-  res.send("This is the get / user/:userID route working 🚀");
-});
-
-// Matches GET requests to:
-// /usr and /user
-// because "e" is optional (? applies to the character before it)
-app.get(/\/use?r/, (req, res) => {
-  res.send("Optional e route working 🚀");
-});
-
-// Matches GET requests to:
-// /user, /useer, /useeer, etc.
-// because "+" means one or more of the previous character ("e")
-app.get(/\/use+r/, (req, res) => {
-  res.send("Repeated e route working 🚀");
-});
-
-// This will only return for DELETE requests to /user
-app.delete("/user", (req, res) => {
-  res.send("This is the DELETE /user route working 🚀");
-});
-
-// This will only return for put requests to /user
-app.put("/user", (req, res) => {
-  res.send("This is the put /user route working 🚀");
-});
-
-// This will only return for patch requests to /user
-app.patch("/user", (req, res) => {
-  res.send("This is the patch /user route working 🚀");
-});
-
-app.listen(3000, () => {
-  console.log("Test is running on port 3000");
+// call DB connection
+connectDB()
+  .then(() => {
+    console.log("MongoDB connected successfully");
+    app.listen(3000, () => {
+      console.log("Server is running on port 3000");
+    });
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error);
+    process.exit(1);
 });
