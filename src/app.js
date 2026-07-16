@@ -15,6 +15,8 @@ const categoryRouter = require("./routes/category");
 const attributeRouter = require("./routes/attribute");
 const productRouter = require("./routes/products");
 const addressRouter = require("./routes/address");
+const initializeJobs = require("./jobs");
+
 
 
 app.use("/api/v1/auth", authRouter);
@@ -24,12 +26,14 @@ app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/attributes", attributeRouter);
 app.use("/api/v1/addresses", addressRouter);
 
+initializeJobs();
+
 // call DB connection
 connectDB()
   .then(() => {
     console.log("MongoDB connected successfully");
-    app.listen(3000, () => {
-      console.log("Server is running on port 3000");
+    app.listen(process.env.PORT, () => {
+      console.log(`Server is running on port ${process.env.PORT}`);
     });
   })
   .catch((error) => {
